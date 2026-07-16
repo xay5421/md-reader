@@ -9,6 +9,11 @@
 
   <body>
     <div id="app">
+      <button id="outline-toggle" title="大纲 (Ctrl+Shift+1)">☰</button>
+      <aside id="outline">
+        <div id="outline-title">大纲</div>
+        <nav id="outline-list"></nav>
+      </aside>
       <div id="editor"></div>
       <div id="welcome">
         <div class="welcome-inner">
@@ -16,7 +21,8 @@
           <p>拖入 Markdown 文件，或按 <kbd>Ctrl</kbd>+<kbd>O</kbd> 打开</p>
           <p class="hints">
             <kbd>Ctrl</kbd>+<kbd>S</kbd> 保存 &nbsp;·&nbsp;
-            <kbd>Ctrl</kbd>+<kbd>E</kbd> 只读/编辑切换
+            <kbd>Ctrl</kbd>+<kbd>E</kbd> 只读/编辑切换 &nbsp;·&nbsp;
+            <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>1</kbd> 大纲
           </p>
         </div>
       </div>

@@ -347,6 +347,122 @@ html[data-readonly="true"] #editor .milkdown .milkdown-code-block .tools .langua
   margin-top: 2em;
 }
 
+/* ===== 大纲侧边栏 ===== */
+
+/* 切换按钮：常驻左上角（打开文件后显示） */
+#outline-toggle {
+  position: fixed;
+  top: 8px;
+  left: 12px;
+  z-index: 15;
+  display: none;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  border: 0;
+  border-radius: 4px;
+  background: transparent;
+  color: #b6bec7;
+  font-size: 15px;
+  line-height: 28px;
+  cursor: pointer;
+  user-select: none;
+}
+
+html[data-hasfile="true"] #outline-toggle {
+  display: block;
+}
+
+#outline-toggle:hover {
+  color: #555555;
+  background: #eef2f5;
+}
+
+#outline {
+  position: fixed;
+  left: 0;
+  top: 0;
+  bottom: 24px; /* 让出状态栏 */
+  width: var(--outline-width, 240px);
+  display: none;
+  flex-direction: column;
+  background: #fafbfc;
+  border-right: 1px solid #eef2f5;
+  z-index: 10;
+  user-select: none;
+  font-family: "Segoe UI", "Noto Sans SC", "Microsoft YaHei UI", sans-serif;
+}
+
+html[data-outline="true"] #outline {
+  display: flex;
+}
+
+/* 大纲展开时正文让位，在剩余空间内居中 */
+html[data-outline="true"] #editor {
+  margin-left: var(--outline-width, 240px);
+}
+
+#outline-title {
+  padding: 14px 16px 8px 44px; /* 左侧让出切换按钮 */
+  font-size: 12px;
+  color: #9aa5b1;
+  flex: none;
+}
+
+#outline-list {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 0 8px 16px;
+}
+
+#outline-list button {
+  display: block;
+  width: 100%;
+  text-align: left;
+  border: 0;
+  background: none;
+  padding: 4px 8px;
+  font-size: 13px;
+  line-height: 1.5;
+  color: #555555;
+  cursor: pointer;
+  border-radius: 4px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-family: inherit;
+}
+
+#outline-list button:hover {
+  background: #eef2f5;
+}
+
+#outline-list button.active {
+  color: #4183c4;
+  font-weight: 600;
+}
+
+#outline-list .lv2 {
+  padding-left: 22px;
+}
+
+#outline-list .lv3 {
+  padding-left: 36px;
+}
+
+#outline-list .lv4,
+#outline-list .lv5,
+#outline-list .lv6 {
+  padding-left: 50px;
+}
+
+#outline-list .empty {
+  padding: 4px 8px;
+  font-size: 12px;
+  color: #c0c7cf;
+}
+
 /* ===== 状态栏 ===== */
 
 #statusbar {
