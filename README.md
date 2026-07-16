@@ -12,6 +12,36 @@
 - 文件被外部编辑器修改时自动热重载（有未保存修改时仅提示，不覆盖）
 - 拖拽打开、`.md` / `.markdown` 文件关联、未保存修改关闭确认
 
+## 安装
+
+### 方式一：安装包（推荐）
+
+从 [Releases](../../releases) 下载 `md-reader_x.y.z_x64-setup.exe`，双击安装：
+
+- 按用户安装（`%LOCALAPPDATA%\md-reader`），无需管理员权限
+- 自动注册 `.md` / `.markdown` 文件关联和开始菜单快捷方式
+- 升级直接运行新版安装包覆盖即可，无需先卸载
+
+卸载：**设置 → 应用 → md-reader → 卸载**，或运行安装目录下的 `uninstall.exe`。
+
+### 方式二：从源码构建
+
+环境要求：
+
+- [Node.js](https://nodejs.org/) 18+
+- [Rust](https://rustup.rs/)（Windows 上需 MSVC 工具链，即 Visual Studio C++ 生成工具）
+
+```powershell
+git clone <本仓库地址>
+cd md-reader
+npm install
+npm run tauri build
+# 安装包产物: src-tauri/target/release/bundle/nsis/md-reader_x.y.z_x64-setup.exe
+# 免安装版:   src-tauri/target/release/md-reader.exe
+```
+
+> Windows 10/11 一般自带 WebView2 运行时；缺失时安装器会引导安装。
+
 ## 开发
 
 ```powershell
@@ -19,11 +49,6 @@ npm install
 npm run tauri dev
 ```
 
-## 构建安装包
+## License
 
-```powershell
-npm run tauri build
-# 产物: src-tauri/target/release/bundle/nsis/md-reader_x.y.z_x64-setup.exe
-```
-
-依赖 Rust（MSVC 工具链）与 Node.js。
+[MIT](LICENSE)
