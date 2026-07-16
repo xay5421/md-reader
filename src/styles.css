@@ -1,0 +1,380 @@
+/* ===== Typora GitHub 主题对齐（覆盖 Milkdown/Crepe frame 主题） ===== */
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  background: #ffffff;
+}
+
+#app {
+  min-height: 100vh;
+}
+
+/* ---- 容器与字体变量 ----
+   frame 主题把 --crepe-* 变量定义在 .milkdown 上，必须在同级或更高优先级覆盖 */
+
+#editor .milkdown {
+  /* Latin 用 Segoe UI，中文回落到思源黑体（Noto Sans SC），比雅黑精致 */
+  --crepe-font-default: "Segoe UI", "Noto Sans SC", "Source Han Sans SC",
+    "Microsoft YaHei UI", "Microsoft YaHei", "Helvetica Neue", Arial,
+    sans-serif;
+  --crepe-font-title: var(--crepe-font-default);
+  /* Cascadia Mono 比 Consolas 现代；中文注释回落思源黑体 */
+  --crepe-font-code: "Cascadia Mono", "Cascadia Code", Consolas,
+    "Noto Sans SC", "Microsoft YaHei", monospace;
+
+  --crepe-color-background: #ffffff;
+  --crepe-color-on-background: #333333;
+  --crepe-color-inline-code: #333333;
+  --crepe-color-selected: #dfe2e5;
+
+  /* 对齐 Typora #write: max-width 860px + padding 30px */
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 30px 30px 100px;
+  box-sizing: content-box;
+}
+
+/* Crepe reset 里 .ProseMirror 自带 padding: 60px 120px，去掉 */
+#editor .milkdown .ProseMirror {
+  padding: 0;
+  font-family: var(--crepe-font-default);
+  font-size: 16px;
+  line-height: 1.6;
+  color: #333333;
+}
+
+/* ---- 标题（Typora github.css 参数） ---- */
+
+#editor .milkdown .ProseMirror h1,
+#editor .milkdown .ProseMirror h2,
+#editor .milkdown .ProseMirror h3,
+#editor .milkdown .ProseMirror h4,
+#editor .milkdown .ProseMirror h5,
+#editor .milkdown .ProseMirror h6 {
+  font-family: var(--crepe-font-default);
+  font-weight: 700;
+  line-height: 1.4;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  padding: 0;
+  color: #333333;
+}
+
+#editor .milkdown .ProseMirror h1 {
+  font-size: 2.25em;
+  line-height: 1.2;
+  margin-top: 1.6rem;
+}
+
+#editor .milkdown .ProseMirror h2 {
+  font-size: 1.75em;
+  line-height: 1.225;
+  padding-bottom: 0.3em;
+  border-bottom: 1px solid #eeeeee;
+  margin-top: 1.4rem;
+}
+
+#editor .milkdown .ProseMirror h3 {
+  font-size: 1.5em;
+  line-height: 1.43;
+}
+
+#editor .milkdown .ProseMirror h4 {
+  font-size: 1.25em;
+}
+
+#editor .milkdown .ProseMirror h5 {
+  font-size: 1em;
+}
+
+#editor .milkdown .ProseMirror h6 {
+  font-size: 1em;
+  color: #777777;
+}
+
+/* ---- 段落 ---- */
+
+#editor .milkdown .ProseMirror p {
+  font-size: 16px;
+  line-height: 1.6;
+  padding: 0;
+  margin: 0.8em 0;
+}
+
+/* ---- 行内元素 ---- */
+
+#editor .milkdown .ProseMirror a {
+  color: #4183c4;
+  text-decoration: none;
+}
+
+#editor .milkdown .ProseMirror a:hover {
+  text-decoration: underline;
+}
+
+#editor .milkdown .ProseMirror code {
+  color: #333333;
+  background: #f3f4f4;
+  font-family: var(--crepe-font-code);
+  font-size: 0.9em;
+  padding: 2px 4px;
+  border-radius: 3px;
+  line-height: 1.4;
+}
+
+/* ---- 代码块 ---- */
+
+#editor .milkdown .milkdown-code-block {
+  background: #f8f8f8;
+  border: 1px solid #e7eaed;
+  border-radius: 3px;
+  padding: 10px 12px;
+  margin: 0.8em 0;
+}
+
+#editor .milkdown .milkdown-code-block .cm-editor {
+  background: #f8f8f8;
+}
+
+/* 隐藏行号/折叠箭头（basicSetup 自带；折叠图标缺字形会渲染成黑方框，
+   Typora 默认也不显示行号） */
+#editor .milkdown .milkdown-code-block .cm-gutters {
+  display: none;
+}
+
+/* 关掉 activeLine 高亮（阅读场景没意义，避免代码块里出现色块） */
+#editor .milkdown .milkdown-code-block .cm-activeLine {
+  background: transparent;
+}
+
+#editor .milkdown .milkdown-code-block .cm-content {
+  font-family: var(--crepe-font-code);
+  font-size: 14px;
+  /* 整数像素行高，避免小数行高在选区/光标定位时的取整抖动 */
+  line-height: 22px;
+  padding: 0;
+}
+
+#editor .milkdown .milkdown-code-block .cm-line {
+  padding-left: 0;
+  line-height: 22px;
+}
+
+/* 多行选择显示修复：
+   CodeMirror 的 drawSelection 按文字度量自绘选区矩形，中英文混排时
+   每行高度不一致。禁用自绘层，恢复浏览器原生选区（整行等高）。 */
+#editor .milkdown .milkdown-code-block .cm-selectionLayer {
+  display: none !important;
+}
+
+#editor .milkdown .milkdown-code-block .cm-content ::selection,
+#editor .milkdown .milkdown-code-block .cm-content::selection {
+  background: #d5d5d5 !important;
+}
+
+/* 语言按钮/复制按钮改为悬浮在右上角，不占布局空间 */
+#editor .milkdown .milkdown-code-block .tools {
+  position: absolute;
+  top: 6px;
+  right: 8px;
+  z-index: 10;
+  justify-content: flex-end;
+  gap: 6px;
+}
+
+/* 语言按钮：弱化为灰色文字标签，仅编辑模式可见（悬停出现） */
+#editor .milkdown .milkdown-code-block .tools .language-button {
+  margin-bottom: 0;
+  background: transparent;
+  border: none;
+  color: #8a949e;
+  font-weight: 400;
+}
+
+#editor .milkdown .milkdown-code-block .tools .language-button:hover {
+  background: #eef0f2;
+}
+
+/* 只读模式下语言按钮不可用，直接隐藏 */
+html[data-readonly="true"] #editor .milkdown .milkdown-code-block .tools .language-button {
+  display: none !important;
+}
+
+/* 复制等工具按钮：白底细边框，悬停出现 */
+#editor .milkdown .milkdown-code-block .tools .tools-button-group button {
+  background: #ffffff;
+  border: 1px solid #e7eaed;
+  color: #8a949e;
+}
+
+/* ---- 引用 ---- */
+
+#editor .milkdown .ProseMirror blockquote {
+  padding-left: 16px;
+  margin: 0.8em 0;
+  color: #777777;
+}
+
+#editor .milkdown .ProseMirror blockquote::before {
+  background: #dfe2e5;
+  border-radius: 0;
+  width: 4px;
+  top: 0;
+  bottom: 0;
+}
+
+#editor .milkdown .ProseMirror blockquote p {
+  margin: 0.4em 0;
+}
+
+/* ---- 列表 ---- */
+
+#editor .milkdown .ProseMirror ul,
+#editor .milkdown .ProseMirror ol {
+  padding-left: 0;
+  margin: 0.8em 0;
+}
+
+/* 嵌套列表：不叠加块间距，缩进量 = 标号宽 24px + 间隙 6px = 30px（对齐 Typora） */
+#editor .milkdown .ProseMirror ul ul,
+#editor .milkdown .ProseMirror ul ol,
+#editor .milkdown .ProseMirror ol ul,
+#editor .milkdown .ProseMirror ol ol {
+  margin: 0;
+}
+
+/* 列表项内的段落不再叠加段间距 */
+#editor .milkdown .ProseMirror li p {
+  margin: 0;
+}
+
+/* Crepe 列表项标号高度 32px 太松，压缩到接近行高 */
+#editor .milkdown .milkdown-list-item-block li {
+  gap: 6px;
+}
+
+#editor .milkdown .milkdown-list-item-block li .label-wrapper,
+#editor .milkdown .milkdown-list-item-block li .label-wrapper .label {
+  height: 26px;
+}
+
+#editor .milkdown .milkdown-list-item-block li .label-wrapper .label {
+  padding: 1px 0;
+}
+
+/* ---- 表格 ---- */
+
+#editor .milkdown .ProseMirror table {
+  border-collapse: collapse;
+  margin: 0.8em 0;
+  font-size: 16px;
+}
+
+#editor .milkdown .ProseMirror th,
+#editor .milkdown .ProseMirror td {
+  border: 1px solid #dfe2e5;
+  padding: 6px 13px;
+}
+
+#editor .milkdown .ProseMirror th {
+  background: #f6f8fa;
+  font-weight: 600;
+}
+
+#editor .milkdown .ProseMirror tr:nth-child(2n) td {
+  background: #f8f8f8;
+}
+
+/* ---- 分割线（Typora: 2px #e7e7e7）---- */
+
+#editor .milkdown .ProseMirror hr {
+  height: 12px;
+  padding: 5px 0;
+  background-color: #e7e7e7;
+  background-clip: content-box;
+  border: none;
+  margin: 0.8em 0;
+}
+
+/* ---- 图片 ---- */
+
+#editor .milkdown .ProseMirror img {
+  max-width: 100%;
+}
+
+/* ===== 欢迎页 ===== */
+
+#welcome {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #ffffff;
+  cursor: pointer;
+  z-index: 10;
+  font-family: "Open Sans", -apple-system, "Segoe UI", "Microsoft YaHei UI",
+    sans-serif;
+}
+
+.welcome-inner {
+  text-align: center;
+  color: #9aa5b1;
+}
+
+.welcome-inner h1 {
+  color: #333333;
+  font-weight: 700;
+  margin-bottom: 0.4em;
+}
+
+.welcome-inner kbd {
+  display: inline-block;
+  padding: 2px 6px;
+  font-size: 0.85em;
+  font-family: Consolas, monospace;
+  background: #f6f8fa;
+  border: 1px solid #d1d5da;
+  border-bottom-width: 2px;
+  border-radius: 4px;
+  color: #444d56;
+}
+
+.welcome-inner .hints {
+  font-size: 0.85em;
+  margin-top: 2em;
+}
+
+/* ===== 状态栏 ===== */
+
+#statusbar {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 12px;
+  font-size: 12px;
+  font-family: "Segoe UI", "Microsoft YaHei UI", sans-serif;
+  color: #9aa5b1;
+  background: #fafbfc;
+  border-top: 1px solid #eef2f5;
+  z-index: 20;
+  user-select: none;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+#status-right {
+  display: flex;
+  gap: 10px;
+}
+
+#status-dirty {
+  color: #e36209;
+}

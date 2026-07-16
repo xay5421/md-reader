@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>md-reader</title>
+    <script type="module" src="/src/main.ts" defer></script>
+  </head>
+
+  <body>
+    <div id="app">
+      <div id="editor"></div>
+      <div id="welcome">
+        <div class="welcome-inner">
+          <h1>md-reader</h1>
+          <p>拖入 Markdown 文件，或按 <kbd>Ctrl</kbd>+<kbd>O</kbd> 打开</p>
+          <p class="hints">
+            <kbd>Ctrl</kbd>+<kbd>S</kbd> 保存 &nbsp;·&nbsp;
+            <kbd>Ctrl</kbd>+<kbd>E</kbd> 只读/编辑切换
+          </p>
+        </div>
+      </div>
+      <div id="statusbar">
+        <span id="status-file">未打开文件</span>
+        <span id="status-right">
+          <span id="status-mode"></span>
+          <span id="status-dirty"></span>
+        </span>
+      </div>
+    </div>
+  </body>
+</html>
