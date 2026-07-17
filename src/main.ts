@@ -155,9 +155,19 @@ async function refreshUi() {
   }
 }
 
+/**
+ * 更新 dirty 并同步到 Rust 侧。
+ * 关闭确认由 Rust 处理（见 lib.rs）：webview 被系统挂起/崩溃（黑屏）
+ * 时窗口依然可以正常关闭，不会因等待 JS 回应而卡死。
+ */
+function setDirty(value: boolean) {
+  dirty = value;
+  void invoke("set_dirty", { dirty: value }).catch(() => {});
+}
+
 function markDirty() {
   if (!dirty) {
-    dirty = true;
+    setDirty(true);
     void refreshUi();
   }
 }
@@ -334,7 +344,7 @@ async function openFile(path: string, fromHistory = false): Promise<boolean> {
   if (seq !== openSeq) return false; // 期间有更新的打开操作，放弃本次
   currentPath = path;
   savedContent = content;
-  dirty = false;
+  setDirty(false);
   if (!fromHistory) pushHistory(path);
   await mountEditor(content);
   await startWatch(path);
@@ -363,7 +373,7 @@ async function saveFile() {
   }
   currentPath = path;
   savedContent = md;
-  dirty = false;
+  setDirty(false);
   if (isSaveAs) {
     await startWatch(path); // 文件已存在后再 watch
     pushHistory(path);
@@ -386,17 +396,26 @@ async function chooseAndOpen() {
 
 const scheduleReload = debounce(() => void reloadFromDisk(), 150);
 
+let watchSeq = 0; // 防止并发 startWatch 竞态泄漏旧 watcher
+
 async function startWatch(path: string) {
+  const seq = ++watchSeq;
   unwatch?.();
   unwatch = null;
   scheduleReload.cancel(); // 丢弃上一个文件遗留的 pending 重载
   try {
-    unwatch = await watchImmediate(path, () => {
+    const stop = await watchImmediate(path, () => {
       // 自己保存触发的事件：跳过（内容比较兜底，这里只是省一次读盘）
       if (Date.now() - lastWriteAt < 800) return;
       // debounce：外部编辑器保存往往触发多个事件
       scheduleReload();
     });
+    if (seq !== watchSeq) {
+      // await 期间又发起了新的 watch：本次已过期，立即释放
+      stop();
+      return;
+    }
+    unwatch = stop;
   } catch {
     // watch 失败不影响文件打开，仅失去外部变更热重载
   }
@@ -528,14 +547,9 @@ window.addEventListener("resize", debounce(fitOutlineWidth, 150));
 el.outlineToggle.addEventListener("click", toggleOutline);
 el.welcome.addEventListener("click", () => void chooseAndOpen());
 
-// 窗口关闭：未保存修改确认
-void appWindow.onCloseRequested(async (event) => {
-  try {
-    if (!(await confirmDiscardChanges())) event.preventDefault();
-  } catch {
-    // 确认对话框异常时放行关闭，绝不把窗口卡死
-  }
-});
+// 窗口关闭确认在 Rust 侧处理（lib.rs on_window_event）。
+// 不要在这里注册 onCloseRequested：JS 关闭监听会让关闭流程依赖
+// webview 存活，webview 黑屏/挂起后窗口将永远无法关闭。
 
 // ---------- startup ----------
 
